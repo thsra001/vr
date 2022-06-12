@@ -50,6 +50,9 @@ glLoader.load(
      ,randInt(-300,30)
      ,randInt(-30,30))
     gltf.scene.name="doug"
+    gltf.scene.rotateZ(randInt(-1,1)/10)         
+    gltf.scene.rotateY(randInt(-1,1)/10)
+    gltf.scene.rotateX(randInt(-1,1)/10)
 	},
 	// called while loading is progressing
 	function ( xhr ) {
