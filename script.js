@@ -3,7 +3,7 @@ import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/js
 /*       ! i might need this !
 import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
 */
-
+let dougs=[];
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
@@ -41,7 +41,7 @@ function getDoug() {
 
 glLoader.load(
 	// resource URL
-	"tex/modals/"+randInt(1,3)+".glb",
+	"tex/modals/"+randInt(1,9)+".glb",
 	// called when the resource is loaded
 	function ( gltf ) {
 		scene.add( gltf.scene );
@@ -49,10 +49,11 @@ glLoader.load(
       randInt(-30,30)
      ,randInt(-300,30)
      ,randInt(-30,30))
-    gltf.scene.name="doug"
-    gltf.scene.rotateZ(randInt(-1,1)/10)         
-    gltf.scene.rotateY(randInt(-1,1)/10)
-    gltf.scene.rotateX(randInt(-1,1)/10)
+    gltf.scene.name="doug";
+    dougs.push(gltf.scene)
+    gltf.scene.rotateZ(randInt(-10,10));
+    gltf.scene.rotateY(randInt(-10,10));
+    gltf.scene.rotateX(randInt(-10,10));
 	},
 	// called while loading is progressing
 	function ( xhr ) {
@@ -136,7 +137,10 @@ moveCamera();
 function render() {
   // Render the scene and the camera
   renderer.render(scene, camera);
-
+for (let i = 0; i < dougs.length; i++) {
+  dougs[i].rotateX(0.009);
+  dougs[i].rotateY(0.008);
+}
   // resizing logic
   const canvas = renderer.domElement;
   camera.aspect = canvas.clientWidth / canvas.clientHeight;
