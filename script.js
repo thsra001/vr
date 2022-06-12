@@ -37,7 +37,7 @@ function resizeRendererToDisplaySize(renderer) {
 // load models
 const glLoader = new GLTFLoader();
 function getDoug() {
-  
+
 
 glLoader.load(
 	// resource URL
@@ -151,7 +151,7 @@ for (let i = 0; i < dougs.length; i++) {
     camera.aspect = canvas.clientWidth / canvas.clientHeight;
     camera.updateProjectionMatrix();
   } // other stuff
-  
+
 
   // Make it call the render() function about every 1/60 second
   requestAnimationFrame(render);
