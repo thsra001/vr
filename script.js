@@ -131,6 +131,7 @@ function moveCamera() {
 document.body.onscroll = moveCamera;
 moveCamera();
 
+
 //render loop for rendering scene and logic loop
 function render() {
   // Render the scene and the camera
