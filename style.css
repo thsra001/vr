@@ -5,7 +5,7 @@ padding: 0;
 
 
 html, body {
-   height: 800%;
+   height: 100%;
 }
 #c /*very important canvas for background*/{
    width: 100%;
@@ -15,11 +15,3 @@ html, body {
  left: 0;
  top: 0;
   z-index: -1; 
-}
-#top {
-  width:100vw; background-color:white;
-  height:8vh;
-  position: fixed;
-  text-align:center;
-  font-family: 'Quicksand', sans-serif;
-}

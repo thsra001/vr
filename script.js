@@ -1,8 +1,7 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js';
-import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js';
-/*       ! i might need this !
-import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
-*/
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.127.0/build/three.module.js';
+import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.127.0/examples/jsm/loaders/GLTFLoader.js';
+import {VRButton} from 'https://cdn.jsdelivr.net/npm/three@0.127.0/examples/jsm/webxr/VRButton.js';
+import { XRControllerModelFactory } from 'https://cdn.jsdelivr.net/npm/three@0.127.0/examples/jsm/webxr/XRControllerModelFactory.js';
 let dougs=[];
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) ) + min;
@@ -36,47 +35,15 @@ function resizeRendererToDisplaySize(renderer) {
 }
 // load models
 const glLoader = new GLTFLoader();
-function getDoug() {
-
-
-glLoader.load(
+// loads a model with 1 as dir string and 2 as the func to run when the model loaded
+function loadModel(url,func) {
+  glLoader.load( //load model
 	// resource URL
-	"tex/modals/"+randInt(1,9)+".glb",
+	url,
 	// called when the resource is loaded
 	function ( gltf ) {
-		scene.add( gltf.scene );
-    gltf.scene.position.set(
-      randInt(-30,30)
-     ,randInt(-300,30)
-     ,randInt(-30,30))
-    gltf.scene.name="doug";
-    dougs.push(gltf.scene)
-    gltf.scene.rotateZ(randInt(-10,10));
-    gltf.scene.rotateY(randInt(-10,10));
-    gltf.scene.rotateX(randInt(-10,10));
-	},
-	// called while loading is progressing
-	function ( xhr ) {
-
-		console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-
-	},
-	// called when loading has errors
-	function ( error ) {
-
-		console.log( 'An error happened' );
-
-	}
-); } // end of long function
-
-glLoader.load( //load sofa
-	// resource URL
-	"tex/modals/end.glb",
-	// called when the resource is loaded
-	function ( gltf ) {
-		scene.add( gltf.scene );
-    gltf.scene.position.set(30,-90,-20)
-    gltf.scene.name="sofa"
+		scene.add(gltf.scene)
+    func(gltf.scene)
 	},
 	// called while loading is progressing
 	function ( xhr ) {
@@ -91,9 +58,28 @@ glLoader.load( //load sofa
 
 	}
 );
+}
+function dougRun(model) { //run on loaded model
+	
+    
+    model.position.set(
+      randInt(-30,30)
+     ,randInt(-30,30)
+     ,randInt(-30,30))
+    model.name="doug";
+    dougs.push(model)
+    model.rotateZ(randInt(-10,10));
+    model.rotateY(randInt(-10,10));
+    model.rotateX(randInt(-10,10));
+	}
+function sofaRun(model) {
+		scene.add( model );
+    model.position.set(30,-90,-20)
+    model.name="sofa"}
+loadModel("tex/modals/end.glb",sofaRun)
 // spawns all the dougnuts
-for (let i = 0; i < 1000; i++) {
-  getDoug()
+for (let i = 0; i < 100; i++) {
+  loadModel("tex/modals/"+randInt(1,9)+".glb",dougRun)
 }
 // loads "transparent" jpg joke
 const map = new THREE.TextureLoader().load( 'tex/fake.jpg' );
@@ -119,22 +105,19 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0xffffff, 1);
 // Append the renderer canvas into <body>
 document.body.appendChild(renderer.domElement);
+// add vr button
+renderer.xr.enabled = true;
+document.body.appendChild(VRButton.createButton(renderer));
 
-
-// scroll move camera downwards
-function moveCamera() {
-  const t = document.body.getBoundingClientRect().top;
-  camera.position.y = t * 0.004;
-  camera.rotation.y = t * 0.00004;
-  camera.rotation.x = t * 0.00001;
-}
-
-document.body.onscroll = moveCamera;
-moveCamera();
-
+const controllerGrip1 = renderer.xr.getControllerGrip(0);
+const model1 = XRControllerModelFactory
+  .createControllerModel( controllerGrip1 );
+controllerGrip1.add( model1 );
+scene.add( controllerGrip1 );
 
 //render loop for rendering scene and logic loop
 function render() {
+ 
   // Render the scene and the camera
   renderer.render(scene, camera);
 for (let i = 0; i < dougs.length; i++) {
@@ -154,7 +137,7 @@ for (let i = 0; i < dougs.length; i++) {
 
 
   // Make it call the render() function about every 1/60 second
-  requestAnimationFrame(render);
+ renderer.setAnimationLoop(render);
 }
 
 render();
