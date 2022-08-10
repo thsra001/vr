@@ -141,7 +141,7 @@ const dolly = new THREE.Group();
   dolly.add(controllerGrip1);
   dolly.add(controllerGrip2);
 
-
+console.console.log("it works?");
 //render loop for rendering scene and logic loop
 function render() {
   // Render the scene and the camera
