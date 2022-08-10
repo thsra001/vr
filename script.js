@@ -1,7 +1,7 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.127.0/build/three.module.js';
-import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.127.0/examples/jsm/loaders/GLTFLoader.js';
-import {VRButton} from 'https://cdn.jsdelivr.net/npm/three@0.127.0/examples/jsm/webxr/VRButton.js';
-import { XRControllerModelFactory } from 'https://cdn.jsdelivr.net/npm/three@0.127.0/examples/jsm/webxr/XRControllerModelFactory.js';
+import * as THREE from 'three'
+import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
+import {VRButton} from 'three/examples/jsm/webxr/VRButton';
+import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory';
 let dougs=[];
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) ) + min;
@@ -60,8 +60,8 @@ function loadModel(url,func) {
 );
 }
 function dougRun(model) { //run on loaded model
-	
-    
+
+
     model.position.set(
       randInt(-30,30)
      ,randInt(-30,30)
@@ -108,16 +108,23 @@ document.body.appendChild(renderer.domElement);
 // add vr button
 renderer.xr.enabled = true;
 document.body.appendChild(VRButton.createButton(renderer));
+var controllerModelFactory = new XRControllerModelFactory();
 
 const controllerGrip1 = renderer.xr.getControllerGrip(0);
-const model1 = XRControllerModelFactory
+const model1 = controllerModelFactory
   .createControllerModel( controllerGrip1 );
 controllerGrip1.add( model1 );
 scene.add( controllerGrip1 );
 
+const controllerGrip2 = renderer.xr.getControllerGrip(1);
+const model2 = controllerModelFactory
+  .createControllerModel( controllerGrip2 );
+controllerGrip2.add( model2 );
+scene.add( controllerGrip2 );
+
 //render loop for rendering scene and logic loop
 function render() {
- 
+
   // Render the scene and the camera
   renderer.render(scene, camera);
 for (let i = 0; i < dougs.length; i++) {
