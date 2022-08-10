@@ -144,10 +144,7 @@ const dolly = new THREE.Group();
 
 //render loop for rendering scene and logic loop
 function render() {
-<<<<<<< HEAD
-=======
 console.log(controllerGrip1);
->>>>>>> a37711e1f4e4fcf252d309e76a80e83ebaf5e6b6
   // Render the scene and the camera
   renderer.render(scene, camera);
 for (let i = 0; i < dougs.length; i++) {
