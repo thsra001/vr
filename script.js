@@ -13,7 +13,7 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   70,
   window.innerWidth / window.innerHeight,
-  1,
+  0.1,
   10000
 );
 
@@ -98,7 +98,7 @@ const skyboss = cubeLoader.load( [
 ] );
 scene.background=skyboss
 // The renderer: something that draws 3D objects onto the canvas
-const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector("#c") });
+const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector("#c"), antialias: true });
 
 
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -107,24 +107,44 @@ renderer.setClearColor(0xffffff, 1);
 document.body.appendChild(renderer.domElement);
 // add vr button
 renderer.xr.enabled = true;
+renderer.xr.setFramebufferScaleFactor(2.0);
 document.body.appendChild(VRButton.createButton(renderer));
-var controllerModelFactory = new XRControllerModelFactory();
+// controllers
+   const controller1 = renderer.xr.getController(0);
+   scene.add(controller1);
 
-const controllerGrip1 = renderer.xr.getControllerGrip(0);
-const model1 = controllerModelFactory
-  .createControllerModel( controllerGrip1 );
-controllerGrip1.add( model1 );
-scene.add( controllerGrip1 );
+   const controller2 = renderer.xr.getController(1);
+   scene.add(controller2);
 
-const controllerGrip2 = renderer.xr.getControllerGrip(1);
-const model2 = controllerModelFactory
-  .createControllerModel( controllerGrip2 );
-controllerGrip2.add( model2 );
-scene.add( controllerGrip2 );
+   var controllerModelFactory = new XRControllerModelFactory();
+
+   var controllerGrip1 = renderer.xr.getControllerGrip(0);
+   controllerGrip1.add(
+       controllerModelFactory.createControllerModel(controllerGrip1)
+   );
+   scene.add(controllerGrip1);
+
+   var controllerGrip2 = renderer.xr.getControllerGrip(1);
+   controllerGrip2.add(
+       controllerModelFactory.createControllerModel(controllerGrip2)
+   );
+   scene.add(controllerGrip2);
+
+
+const dolly = new THREE.Group();
+  dolly.position.set(0, 0, 0);
+  dolly.name = "dolly";
+  scene.add(dolly);
+  dolly.add(camera);
+  dolly.add(controller1);
+  dolly.add(controller2);
+  dolly.add(controllerGrip1);
+  dolly.add(controllerGrip2);
+
 
 //render loop for rendering scene and logic loop
 function render() {
-
+console.log(controllerGrip1);
   // Render the scene and the camera
   renderer.render(scene, camera);
 for (let i = 0; i < dougs.length; i++) {
