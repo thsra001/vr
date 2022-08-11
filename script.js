@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
 import {VRButton} from 'three/examples/jsm/webxr/VRButton';
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory';
+
 let dougs=[];
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) ) + min;
