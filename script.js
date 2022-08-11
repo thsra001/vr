@@ -98,6 +98,11 @@ const skyboss = cubeLoader.load( [
 	'tex/box/pz.png', 'tex/box/nz.png'
 ] );
 scene.background=skyboss
+
+const pointerGeometry = new THREE.BufferGeometry().setFromPoints([
+     new THREE.Vector3(0, 0, 0),
+     new THREE.Vector3(0, 0, -1),
+   ]);
 // The renderer: something that draws 3D objects onto the canvas
 const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector("#c"), antialias: true });
 
@@ -116,7 +121,9 @@ document.body.appendChild(VRButton.createButton(renderer));
 
    const controller2 = renderer.xr.getController(1);
    scene.add(controller2);
-
+   const line2 = new THREE.Line(pointerGeometry);
+      line2.scale.z = 5;
+      controller2.add(line2);
    var controllerModelFactory = new XRControllerModelFactory();
 
    var controllerGrip1 = renderer.xr.getControllerGrip(0);
